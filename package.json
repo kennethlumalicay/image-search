@@ -1,0 +1,19 @@
+{
+  "name": "image-search",
+  "version": "1.0.0",
+  "description": "Website: https://image-search-klm.herokuapp.com/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennethlumalicay/image-search.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kennethlumalicay/image-search/issues"
+  },
+  "homepage": "https://github.com/kennethlumalicay/image-search#readme"
+}
