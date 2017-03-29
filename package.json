@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/kennethlumalicay/image-search/issues"
   },
-  "homepage": "https://github.com/kennethlumalicay/image-search#readme"
+  "homepage": "https://github.com/kennethlumalicay/image-search#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {}
 }
