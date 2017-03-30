@@ -19,8 +19,10 @@ app.get("/imagesearch/*", function(req, res) {
 	key + "&cx="+ cx + "&q=" + search + "&searchType=image&safe=medium&num=" +
 	perPage + (offset ? "&start=" + (offset*perPage) : "");
 	var results = new Array();
+	console.log(jsonString);
 	request({url: jsonString, json: true}, function(err, reqres, body) {
 		var items = reqres.body.items;
+		console.log(items);
 		for(var i=0; i<items.length; i++) {
 			results.push({
 				link: items[i].link,
@@ -31,15 +33,12 @@ app.get("/imagesearch/*", function(req, res) {
 		mongo.connect(dblink, function(err, db) {
 			if(err) throw err;
 			var latest = db.collection("latest");
-			latest.find({term: search},{_id: 0}).toArray(function(err, docs) {
-				if(docs) {
-					latest.insert({term: search, when: new Date()}, function(err, data) {
-						if(err) throw err;
-						console.log("----Inserted----");
-					});
-				}
-				db.close();
+			latest.remove({term: search.replace(/%20/g, " ")});
+			latest.insert({term: search.replace(/%20/g, " "), when: new Date()}, function(err, data) {
+				if(err) throw err;
+				console.log("----Inserted----");
 			});
+			db.close();
 		});
 		res.send(results);
 	});
