@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/kennethlumalicay/image-search#readme",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "mongo": "^0.1.0",
+    "request": "^2.81.0"
   },
   "devDependencies": {}
 }
