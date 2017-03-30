@@ -15,13 +15,11 @@ app.get("/", function(req, res) {
 app.get("/imagesearch/*", function(req, res) {
 	var search = req.path.replace("/imagesearch/", "");
 	var offset = +req.query.offset;
-	console.log(offset);
 	var jsonString = "https://www.googleapis.com/customsearch/v1?key=" +
 	key + "&cx="+ cx + "&q=" + search + "&searchType=image&safe=medium&num=" +
 	perPage + (offset ? "&start=" + (offset*perPage) : "");
 	var results = new Array();
 	request({url: jsonString, json: true}, function(err, reqres, body) {
-		console.log(jsonString);
 		var items = reqres.body.items;
 		for(var i=0; i<items.length; i++) {
 			results.push({
@@ -33,9 +31,13 @@ app.get("/imagesearch/*", function(req, res) {
 		mongo.connect(dblink, function(err, db) {
 			if(err) throw err;
 			var latest = db.collection("latest");
-			latest.insert({term: search, when: new Date()}, function(err, data) {
-				if(err) throw err;
-				console.log("----Inserted----");
+			latest.find({term: search},{_id: 0}).toArray(function(err, docs) {
+				if(docs[0]) {
+					latest.insert({term: search, when: new Date()}, function(err, data) {
+						if(err) throw err;
+						console.log("----Inserted----");
+					});
+				}
 				db.close();
 			});
 		});
