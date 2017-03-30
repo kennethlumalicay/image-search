@@ -32,7 +32,7 @@ app.get("/imagesearch/*", function(req, res) {
 			if(err) throw err;
 			var latest = db.collection("latest");
 			latest.find({term: search},{_id: 0}).toArray(function(err, docs) {
-				if(docs[0]) {
+				if(docs) {
 					latest.insert({term: search, when: new Date()}, function(err, data) {
 						if(err) throw err;
 						console.log("----Inserted----");
