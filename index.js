@@ -21,24 +21,29 @@ app.get("/imagesearch/*", function(req, res) {
 	var results = new Array();
 	request({url: jsonString, json: true}, function(err, reqres, body) {
 		var items = reqres.body.items;
-		for(var i=0; i<items.length; i++) {
-			results.push({
-				link: items[i].link,
-				snippet: items[i].snippet,
-				context: items[i].image.contextLink
-			});
-		}
-		mongo.connect(dblink, function(err, db) {
-			if(err) throw err;
-			var latest = db.collection("latest");
-			latest.remove({term: search.replace(/%20/g, " ")});
-			latest.insert({term: search.replace(/%20/g, " "), when: new Date()}, function(err, data) {
+		if(items) {
+			for(var i=0; i<items.length; i++) {
+				results.push({
+					link: items[i].link,
+					snippet: items[i].snippet,
+					context: items[i].image.contextLink
+				});
+			}
+			mongo.connect(dblink, function(err, db) {
 				if(err) throw err;
-				console.log("----Inserted----");
+				var latest = db.collection("latest");
+				latest.remove({term: search.replace(/%20/g, " ")});
+				latest.insert({term: search.replace(/%20/g, " "), when: new Date()}, function(err, data) {
+					if(err) throw err;
+					console.log("----Inserted----");
+				});
+				db.close();
 			});
-			db.close();
-		});
-		res.send(results);
+			res.send(results);
+		} else {
+			res.send({err: "Exceeded daily search limit."});
+		}
+		
 	});
 });
 app.get("/latest", function(req, res) {
