@@ -19,10 +19,8 @@ app.get("/imagesearch/*", function(req, res) {
 	key + "&cx="+ cx + "&q=" + search + "&searchType=image&safe=medium&num=" +
 	perPage + (offset ? "&start=" + (offset*perPage) : "");
 	var results = new Array();
-	console.log(jsonString);
 	request({url: jsonString, json: true}, function(err, reqres, body) {
 		var items = reqres.body.items;
-		console.log(items);
 		for(var i=0; i<items.length; i++) {
 			results.push({
 				link: items[i].link,
